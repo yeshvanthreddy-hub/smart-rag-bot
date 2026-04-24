@@ -10,7 +10,7 @@ router = APIRouter(prefix="/upload")
 @router.post("/")
 async def upload_file(file: UploadFile = File(...)):
     try:
-        print("\n📥 ===== UPLOAD STARTED =====")
+        print("\n===== UPLOAD STARTED =====")
 
         # Initialize vector service
         vector = VectorService()
@@ -21,7 +21,7 @@ async def upload_file(file: UploadFile = File(...)):
         with path.open("wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
 
-        print("📁 File saved at:", path)
+        print(" File saved at:", path)
 
         # Read file content
         text = DocumentService.read_file(str(path))
@@ -29,7 +29,7 @@ async def upload_file(file: UploadFile = File(...)):
         if text:
             print("📄 TEXT LENGTH:", len(text))
         else:
-            print("❌ TEXT IS EMPTY")
+            print(" TEXT IS EMPTY")
 
         # Validate text
         if not text or text.strip() == "":
@@ -39,21 +39,21 @@ async def upload_file(file: UploadFile = File(...)):
         chunks = DocumentService.split_text(text)
 
         if chunks:
-            print("✂️ CHUNKS CREATED:", len(chunks))
+            print(" CHUNKS CREATED:", len(chunks))
         else:
-            print("❌ NO CHUNKS CREATED")
+            print(" NO CHUNKS CREATED")
 
         if not chunks:
             return {"error": "No chunks created from document"}
 
         # Create FAISS index
-        print("➡️ Calling create_index() NOW")
+        print(" Calling create_index() NOW")
 
         vector.create_index(chunks, file.filename)
 
-        print("✅ create_index() COMPLETED")
+        print(" create_index() COMPLETED")
 
-        print("📤 ===== UPLOAD FINISHED =====\n")
+        print(" ===== UPLOAD FINISHED =====\n")
 
         return {
             "message": f"{file.filename} uploaded and processed successfully",
@@ -61,5 +61,5 @@ async def upload_file(file: UploadFile = File(...)):
         }
 
     except Exception as e:
-        print("❌ UPLOAD ERROR:", e)
+        print(" UPLOAD ERROR:", e)
         return {"error": str(e)}
