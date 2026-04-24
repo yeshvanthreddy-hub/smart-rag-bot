@@ -16,11 +16,11 @@ def chat(request: ChatRequest):
     try:
         user_message = request.user_message.strip()
 
-        print("🧑 USER:", user_message)
+        print(" USER:", user_message)
 
         if not user_message:
             return {
-                "response": "⚠️ Please enter a valid question",
+                "response": " Please enter a valid question",
                 "sources": []
             }
 
@@ -28,11 +28,11 @@ def chat(request: ChatRequest):
         vector = VectorService()
         docs = vector.search(user_message)
 
-        print(f"📊 Docs found: {len(docs)}")
+        print(f" Docs found: {len(docs)}")
 
         if not docs:
             return {
-                "response": "⚠️ No relevant information found in uploaded documents",
+                "response": " No relevant information found in uploaded documents",
                 "sources": []
             }
 
@@ -45,7 +45,7 @@ def chat(request: ChatRequest):
         llm = LLMService()
 
         try:
-            # ✅ FIXED PARAM ORDER
+            #  PARAM ORDER
             response = llm.generate_response(context, user_message)
         except Exception as e:
             print("❌ LLM ERROR:", e)
@@ -71,8 +71,8 @@ def chat(request: ChatRequest):
         }
 
     except Exception as e:
-        print("❌ CHAT ERROR:", e)
+        print(" CHAT ERROR:", e)
         return {
-            "response": "❌ Internal server error",
+            "response": "Internal server error",
             "sources": []
         }
