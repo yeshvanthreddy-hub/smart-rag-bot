@@ -24,7 +24,7 @@ class DocumentService:
                 df = pd.read_excel(path)
                 return df.to_string()
 
-            # TXT ✅ FIXED
+            # TXT 
             elif path.endswith(".txt"):
                 with open(path, "r", encoding="utf-8") as f:
                     return f.read()
